@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: upf-lb
+  labels:
+    app: upf-lb
+spec:
+  containers:
+  - name: upf-load-balancer
+    image: bytecommander12/lightedge-upf-service:v1.0
+    imagePullPolicy: Always
+    command: ["/bin/bash"]
+    args: ["-c","while true; do echo waiting; sleep 10; done"]
+    env:
+    - name: mode
+      value: upf_lb
+  - name: strongswan-ipsec
+    image: bytecommander12/lightedge-strongswan:v1.1
+    imagePullPolicy: Always
+    env:
+    - name: server_server_id
+      value: upf-lb
+    - name: has_own_subnet
+      value: "yes"
+    - name: server_client_subnet
+      value: "10.0.1.0\\/24"
+    - name: server_client_user
+      value: enb-user
+    - name: server_client_pass
+      value: enb-pass
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN","NET_RAW","SYS_ADMIN"]
+  nodeSelector:
+    disktype: cloud
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: upf-lb-service
+spec:
+  selector:
+    app: upf-lb-service
+  type: NodePort
+  ports:
+  - name: ipsec-dataplane
+    protocol: UDP
+    port: 4500
+    targetPort: 4500
+  - name: ipsec-controlplane
+    protocol: UDP
+    port: 500
+    targetPort: 500
+  - name: udp-tunnel
+    protocol: UDP
+    port: 5555
+    targetPort: 5555

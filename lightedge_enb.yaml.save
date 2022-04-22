@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: srsenb
+  labels:
+    app: srsenb
+spec:
+  containers:
+  - name: srsenb
+    image: bytecommander12/srs-enb:v1.2
+    imagePullPolicy: Always
+    env:
+    - name: mcc
+      value: "901"
+    - name: mnc
+      value: "70"
+    - name: n_prb
+      value: "50"
+    - name: ipsec
+      value: "yes"
+    securityContext:
+      privileged: true
+  - name: strongswan-ipsec
+    image: sensefbk/strongswan
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: client_server_address
+      value: upf-lb-service
+    - name: client_server_id
+      value: upf-lb
+    - name: client_server_hostname
+      value: "epc-service-pod"
+    - name: client_client_ip
+      value: "%config"
+    - name: client_client_user
+      value: enb-user
+    - name: client_client_pass
+      value: enb-pass
+

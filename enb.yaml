@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: srsenb
+  labels:
+    app: srsenb
+spec:
+  containers:
+  - name: srsenb
+    image: bytecommander12/srs-enb:vm-test
+    imagePullPolicy: Always
+    env:
+    - name: mcc
+      value: "901"
+    - name: mnc
+      value: "70"
+    - name: n_prb
+      value: "50"
+    securityContext:
+      privileged: true
+  - name: srsue
+    image: bytecommander12/srs-ue:v1.0
+    imagePullPolicy: Always

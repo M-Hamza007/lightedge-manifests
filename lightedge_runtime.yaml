@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lightedge-runtime
+  labels:
+    app: lightedge-runtime
+spec:
+  containers:
+  - name: lightedge-runtime
+    image: joncnet/lightedge-runtime
+    imagePullPolicy: IfNotPresent
+  - name: mongodb
+    image: mongo:4.4.6
+    imagePullPolicy: IfNotPresent
+

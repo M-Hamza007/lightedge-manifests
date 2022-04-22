@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: upf-manager
+  labels:
+    app: upf-manager
+spec:
+  containers:
+  - name: upf-manager
+    image: sensefbk/lightedge-upfservice-manager
+    imagePullPolicy: IfNotPresent
+  - name: mongodb
+    image: mongo:4.4.6
+    imagePullPolicy: IfNotPresent

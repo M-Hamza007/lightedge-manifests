@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: epc
+  namespace: new-new
+  labels:
+    app: epc
+spec:
+  containers:
+  - name: open5gs
+    image: snslab/open5gs:latest
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: MCC
+      value: "222"
+    - name: MNC
+      value: "93"
+    - name: TAC
+      value: "1"
+    - name: k8s_dns
+      value: "yes"
+    securityContext:
+      privileged: true
+  - name: open5gs-webui
+    image: snslab/open5gs-webui:latest
+    imagePullPolicy: IfNotPresent
+  - name: mongodb
+    image: mongo:4.4.6
+    imagePullPolicy: IfNotPresent
+  - name: strongswan
+    image: bytecommander12/lightedge-strongswan:v1.1
+    imagePullPolicy: Always
+    env:
+    - name: server_server_id
+      value: epc
+    - name: server_client_subnet
+      value: "10.0.1.0\\/24"
+    - name: client_client_ip_
+      value: "%config"
+    - name: client_client_user
+      value: upf-user
+    - name: client_client_pass
+      value: upf-pass
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN","NET_RAW","SYS_ADMIN"]
+  nodeSelector:
+    disktype: cloud
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: epc-service
+  namespace: new-new
+spec:
+  selector:
+    app: epc
+  type: NodePort
+  ports:
+  - name: web-ui
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  - name: data-plane
+    protocol: UDP
+    port: 4500
+    targetPort: 4500
+  - name: control-plane
+    protocol: UDP
+    port: 500
+    targetPort: 500
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: epc-service-pod
+  namespace: new-new
+spec:
+  selector:
+    app: epc
+  clusterIP: None
