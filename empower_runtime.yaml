@@ -7,7 +7,39 @@ metadata:
 spec:
   containers:
   - name: empower-runtime
-    image: sensefbk/empower-runtime
+    image: bytecommander12/empower-runtime:v1.0
     imagePullPolicy: Always
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN","NET_RAW","SYS_ADMIN"]
+  - name: mongodb
+    image: mongo:4.4.6
+    imagePullPolicy: Always
+#  - name: mongo-express
+#    image: mongo-express
+#    imagePullPolicy: Always
+#    env:
+#    - name: ME_CONFIG_MONGODB_SERVER
+#      value: localhost
+#    - name: ME_CONFIG_MONGODB_PORT
+#      value: 27017
+#    ports:
+#    - containerPort: 8081
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: em-mongo-express-service
+#spec:
+#  selector:
+#    app: emp
+#  type: NodePort
+#  ports:
+#  - name: web-ui
+#    protocol: TCP
+#    port: 8081
+#    targetPort: 8081
+#    nodePort: 30007
+
 
 

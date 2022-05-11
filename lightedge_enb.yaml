@@ -7,7 +7,8 @@ metadata:
 spec:
   containers:
   - name: srsenb
-    image: bytecommander12/srs-enb:vm-test
+    #image: bytecommander12/srs-enb:vm-test
+    image: bytecommander12/srs-enb-empower:v1.0
     imagePullPolicy: Always
     env:
     - name: mcc
@@ -19,7 +20,7 @@ spec:
     - name: ipsec
       value: "yes"
     - name: empower_controller
-      value: "no"
+      value: "yes"
     securityContext:
       privileged: true
   - name: strongswan-ipsec

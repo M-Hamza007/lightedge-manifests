@@ -7,8 +7,25 @@ metadata:
 spec:
   containers:
   - name: upf-manager
-    image: sensefbk/lightedge-upfservice-manager
-    imagePullPolicy: IfNotPresent
+    image: bytecommander12/lightedge-upfservice-manager:v1.0
+#    image: sensefbk/lightedge-upfservice-manager
+    imagePullPolicy: Always
+    ports: 
+    - containerPort: 7000
+    command: ["/bin/bash"]
+    args: ["-c","while true; do echo waiting; sleep 10; done"]
   - name: mongodb
     image: mongo:4.4.6
     imagePullPolicy: IfNotPresent
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: upf-manager-service
+#spec:
+#  selector:
+#    app: upf-manager
+#  ports:
+#    - protocol: TCP
+#      port: 7000
+#      targetPort: 7000

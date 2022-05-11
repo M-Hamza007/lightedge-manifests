@@ -7,13 +7,16 @@ metadata:
 spec:
   containers:
   - name: upf-load-balancer
-    image: bytecommander12/lightedge-upf-service:v1.0
+    image: bytecommander12/lightedge-upf-service:main-4ce9075
     imagePullPolicy: Always
     command: ["/bin/bash"]
     args: ["-c","while true; do echo waiting; sleep 10; done"]
     env:
     - name: mode
       value: upf_lb
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN","NET_RAW","SYS_ADMIN"]
   - name: strongswan-ipsec
     image: bytecommander12/lightedge-strongswan:v1.1
     imagePullPolicy: Always

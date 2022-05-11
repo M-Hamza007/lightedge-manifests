@@ -2,14 +2,36 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: lightedge-runtime
-  labels:
+  namespace: new-new
+  labels: 
     app: lightedge-runtime
 spec:
   containers:
   - name: lightedge-runtime
-    image: joncnet/lightedge-runtime
-    imagePullPolicy: IfNotPresent
+    image: bytecommander12/lightedge-runtime:v1.0
+    imagePullPolicy: Always
+    ports:
+      - containerPort: 7000
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN","NET_RAW","SYS_ADMIN"]
+    command: ["/bin/bash"]
+    args: ["-c","while true; do echo waiting; sleep 10; done"]
   - name: mongodb
     image: mongo:4.4.6
-    imagePullPolicy: IfNotPresent
-
+#  - name: upf-manager
+#    image: bytecommander12/lightedge-upfservice-manager:v1.0
+#    image: sensefbk/lightedge-upfservice-manager
+#    imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lightedge-runtime-service
+spec:
+  selector:
+    app: lightedge-runtime
+  ports:
+    - protocol: TCP
+      port: 7000
+      targetPort: 7000

@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: upf
-    image: bytecommander12/lightedge-upf-service:main-983419b
+    image: bytecommander12/lightedge-upf-service:main-4ce9075
     imagePullPolicy: Always
     env:
     - name: mode
