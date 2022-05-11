@@ -1,3 +1,4 @@
+# Minimal implementation of RAN
 apiVersion: v1
 kind: Pod
 metadata:
